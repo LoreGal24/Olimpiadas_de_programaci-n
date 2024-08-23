@@ -20,7 +20,7 @@ void printResult(bool resultado) {
 
 void printResultMapa(bool resultado, vector<vector<char>> mapaActualizado) {
     if(resultado){
-        for(int x=0; x<mapaActualizado.size()-1;x++){
+        for(int x=0; x<mapaActualizado.size();x++){
         cout << "{ ";
         for(int y=0; y<mapaActualizado[x].size();y++){
             cout <<mapaActualizado[x][y]<<", ";
