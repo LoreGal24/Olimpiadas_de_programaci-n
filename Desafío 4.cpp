@@ -5,8 +5,9 @@
 using namespace std;
 
 int retrocedio=0;
-bool retrocediendo;
-int caminosError=0;
+bool retrocediendo;//intento de registrar la cantidad de caminos erroneos
+int caminosError=0;//intento de registrar la cantidad de caminos erroneos
+int contadorRecursivo=-1;//Entiendo que las llamadas recursivas son cuando una funcion se llama a si misma en la misma, por lo tanto la primera vez que se le llama no cuenta como llamada recursiva
 
 void printResult(bool resultado) {
     if(resultado){
@@ -33,7 +34,7 @@ void printResultMapa(bool resultado, vector<vector<char>> mapaActualizado) {
 }
 
 bool findPath(vector<vector<char>>& values, int x, int y) {
-    
+    contadorRecursivo++;
     if (x < 0 || y < 0 || x >= values.size() || y >= values[0].size()) {
         return false;
     }
@@ -51,38 +52,31 @@ bool findPath(vector<vector<char>>& values, int x, int y) {
     }
     
     if(findPath(values, x, y + 1)){
+        retrocediendo=false;
         return true;
-        if(retrocediendo){
-            caminosError++;
-            retrocediendo=false;
-        }
     }
     
     if(findPath(values, x + 1, y)){
+        retrocediendo=false;
         return true;
-        if(retrocediendo){
-            caminosError++;
-            retrocediendo=false;
-        }
     }
     
     if(findPath(values, x, y - 1)){
+        retrocediendo=false;
         return true;
-        if(retrocediendo){
-            caminosError++;
-            retrocediendo=false;
-        }
     }
     
     if(findPath(values, x - 1, y)){
+        retrocediendo=false;
         return true;
-        if(retrocediendo){
-            caminosError++;
-            retrocediendo=false;
-        }
+        
     }
     
-   
+    if(retrocediendo){
+        caminosError++;
+        retrocediendo=false;
+    }
+    
     retrocediendo=true;
     values[x][y] = '.';
     retrocedio++;
@@ -95,29 +89,29 @@ int main() {
     
     vector<vector<char>> mapa = {
         {'.', '#', '#', '#', '#', '#'},
-        {'.', '.', '.', '.', '.', '#'},
-        {'#', '.', '#', '.', '#', '#'},
-        {'#', '.', '#', '.', '#', '#'},
-        {'#', '.', '#', '.', '.', '.'},
-        {'#', '.', '#', '.', '#', '#'},
-        {'.', '#', '#', '.', '.', '#'},
-        {'.', '.', '.', '.', '.', '#'},
-        {'#', '.', '#', '.', '#', '#'},
+        {'.', '.', '.', '.', '#', '#'},
+        {'#', '#', '#', '.', '#', '#'},
+        {'#', '#', '#', '.', '#', '#'},
+        {'#', '#', '#', '.', '#', '#'},
+        {'#', '#', '#', '.', '#', '#'},
+        {'#', '#', '#', '.', '#', '#'},
+        {'#', '.', '.', '.', '#', '#'},
+        {'#', '.', '#', '#', '#', '#'},
         {'#', '.', '#', '.', '#', '#'},
         {'#', '.', '#', '.', '.', '.'},
         {'#', '.', '#', '.', '#', '.'},
-        {'.', '#', '#', '#', '#', '.'},
-        {'.', '.', '.', '.', '.', '.'},
+        {'#', '.', '#', '#', '#', '.'},
+        {'#', '.', '#', '.', '.', '.'},
         {'#', '.', '#', '.', '#', '#'},
         {'#', '.', '#', '.', '#', '#'},
         {'#', '.', '#', '.', '.', '.'},
-        {'#', '.', '#', '.', '.', '#'},
-        {'.', '#', '#', '#', '.', '#'},
-        {'.', '.', '.', '.', '.', '#'},
-        {'#', '.', '#', '.', '#', '#'},
+        {'#', '.', '#', '.', '.', '.'},
+        {'#', '.', '#', '#', '#', '.'},
+        {'#', '.', '.', '.', '.', '.'},
+        {'#', '#', '#', '.', '#', '#'},
         {'#', '.', '#', '.', '#', '#'},
         {'#', '.', '#', '.', '.', 'G'},
-        {'#', '.', '#', '.', '#', '#'}
+        {'#', '.', '#', '#', '#', '#'}
     };
     tiempo=clock();
     confirmador=findPath(mapa, 0, 0);
@@ -127,7 +121,7 @@ int main() {
     
     cout << "el timpo que tardo en encontrar el camino correcto fue: "<< (double(tiempo)/CLOCKS_PER_SEC)*1000<<" milisegundos" << endl;
     cout << "la cantidad de veces que tuvo que retroceder fue: "<<retrocedio<< " veces" << endl;
-    cout << "la cantidad e caminos incorrectos que encontro fue de: "<< caminosError;
-   // cout << "la cantidad de veces que entro: "<< vecesRetroceso(retrocedio) << endl;
+    cout << "la cantidad e caminos incorrectos que encontro fue de: "<< caminosError<< endl;//este no funciona pero aún no puedo solucionar porque
+    cout << "la cantidad de llamadas recursivas que tuvo: "<< contadorRecursivo;
     return 0;
 }
